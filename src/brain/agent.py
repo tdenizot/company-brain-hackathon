@@ -19,10 +19,14 @@ Règles :
 - Cite tes sources sous la forme source:slack / source:github / source:notion (le contexte porte ces en-têtes).
 - Si le contexte contient des entrées « Annuaire » indiquant qu'une information utile existe mais en accès restreint,
   ne devine pas son contenu : signale-la dans access_gaps avec le responsable à qui demander l'accès.
+  Exception : si le jeu de données cité par l'annuaire fait partie des JEUX DE DONNÉES ACCESSIBLES, l'accès a été accordé :
+  utilise le contenu et ne le signale pas dans access_gaps.
 - Si deux sources se contredisent (ex. consignes Build vs workflow GitHub, cahier des charges vs code), signale-le dans contradictions.
 - Réponds en français, de façon concise et actionnable.
 
 Réponds en JSON : {{"answer": str, "sources": [str], "access_gaps": [{{"sujet": str, "responsable": str}}], "contradictions": [str]}}
+
+JEUX DE DONNÉES ACCESSIBLES : {datasets}
 
 CONTEXTE :
 {context}"""
@@ -57,7 +61,8 @@ async def ask(user_key: str, question: str) -> dict:
         model=AGENT_MODEL,
         response_format={"type": "json_object"},
         messages=[
-            {"role": "system", "content": SYSTEM_PROMPT.format(name=USERS[user_key].name, context=context or "(vide)")},
+            {"role": "system", "content": SYSTEM_PROMPT.format(
+                name=USERS[user_key].name, datasets=", ".join(datasets), context=context or "(vide)")},
             {"role": "user", "content": question},
         ],
     )
