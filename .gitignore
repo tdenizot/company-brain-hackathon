@@ -1,0 +1,9 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.cognee_system/
+.cognee_data/
+cognee-feedback.md
+.cognee-feedback.state
+.DS_Store
