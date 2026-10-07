@@ -1,0 +1,12 @@
+{
+  "name": "company-brain",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "slack:connect": "node scripts/slack-connect.mjs"
+  },
+  "dependencies": {
+    "@scalekit-sdk/node": "^2.19.0",
+    "dotenv": "^18.0.6"
+  }
+}
