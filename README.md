@@ -23,6 +23,19 @@ cp .env.example .env            # remplir la clé Respan (+ Scalekit pour le pul
 .venv/bin/python -m brain.cli ask --as thomas "…même question…"
 ```
 
+## Connecter GitHub via Scalekit (Node)
+
+1. Scalekit Dashboard → **AgentKit → Connections** → GitHub, nommée `github` (identifiants gérés par Scalekit : pas d'OAuth app à créer).
+2. Renseigner `SCALEKIT_ENVIRONMENT_URL`, `SCALEKIT_CLIENT_ID`, `SCALEKIT_CLIENT_SECRET` dans `.env` (Developers → API Credentials).
+3. Lancer :
+
+```bash
+npm install
+npm run connect:github              # Marc puis Thomas ; `-- thomas` pour un seul
+```
+
+Le script affiche un lien d'autorisation par utilisateur, attend que le compte passe `ACTIVE`, puis lit `GITHUB_OWNER/GITHUB_REPOS` (par défaut `tdenizot/company-brain-hackathon`) au nom de chacun. Les identifiants Scalekit sont les emails de `src/brain/users.py` : `ingest --source scalekit` réutilise ces comptes connectés.
+
 ## Structure
 
 | Fichier | Rôle |
@@ -32,3 +45,4 @@ cp .env.example .env            # remplir la clé Respan (+ Scalekit pour le pul
 | `src/brain/memory.py` | Datasets Cognee par utilisateur, annuaire, grants, mode `naive` pour la baseline d'éval |
 | `src/brain/agent.py` | Copilote d'incident : recall → LLM via Respan → réponse, sources, accès manquants, contradictions |
 | `src/brain/cli.py` | Ligne de commande |
+| `scalekit/connect-github.mjs` | Connexion GitHub par utilisateur via Scalekit AgentKit (SDK Node) |
