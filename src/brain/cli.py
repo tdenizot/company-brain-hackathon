@@ -3,7 +3,7 @@
   python -m brain.cli reset
   python -m brain.cli ingest [--source sample|scalekit] [--mode secure|naive] [--improve]
   python -m brain.cli ask --as thomas "Quel client est impacté par l'alerte sur portail-artisans ?"
-  python -m brain.cli grant marc-commercial --to thomas
+  python -m brain.cli grant commercial-maison-duval-renovation --to thomas
   python -m brain.cli whoami --as thomas
 """
 

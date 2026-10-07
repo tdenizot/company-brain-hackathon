@@ -125,7 +125,7 @@ L'agent détecte l'écart, cite les sources, et **agit** : ouvre une **issue Git
 
 ## 4. Design mémoire (Cognee)
 
-- **Datasets par utilisateur** : `marc-brain`, `thomas-brain` (+ `directory` partagé, métadonnées seulement).
+- **Datasets** : `marc-projet` (pull projet de Marc), `commercial-<client>` (une fiche CRM = un dataset, pour des grants au plus juste), `thomas-projet` (pull de Thomas), `annuaire` (métadonnées seulement, partagé à tous).
 - **`node_set` systématiques** pour la provenance :
   - `source:slack` / `source:github` / `source:notion`
   - `channel:<nom>`, `repo:<nom>`, `notion:<type>` (`sop`, `crm`, `cdc`, `planning`, `build`, `projet`)
@@ -141,6 +141,17 @@ L'agent détecte l'écart, cite les sources, et **agit** : ouvre une **issue Git
 - Ouvrir **`cognee-cli -ui`** pendant la démo : le graphe est le pitch.
 
 ---
+
+### Décision : ce que signifie un « grant » (validée)
+
+- **Deux niveaux de droits** : (1) droits **natifs** dans Notion / Slack / GitHub → ce que chacun peut *récupérer* via Scalekit avec son propre compte ; (2) droits **Cognee** → ce que chacun peut *interroger* dans le brain.
+- Par défaut ils sont alignés : le pull de Thomas (invité Notion) ne remonte jamais le CRM.
+- Un grant Cognee **ne change rien dans Notion** : Thomas ne peut toujours pas ouvrir la fiche CRM. Marc, propriétaire de la donnée, partage **sa connaissance** à travers le brain, explicitement, de façon **révocable**.
+- Pitch : **on partage de la connaissance, pas un accès outil**. Règle : *le brain ne montre jamais plus que les outils d'origine, sauf grant explicite du propriétaire.*
+- **Moindre privilège** : un dataset commercial par client → Marc ne partage que la fiche du client concerné par l'incident.
+- **Audit** : chaque grant est tracé (qui, quoi, à qui, quand), posté dans Slack.
+- Bonus possible : l'agent propose à Marc de répercuter l'accès dans l'outil source (faisable Slack / GitHub ; Notion via lien, l'API ne gère pas le partage).
+- Sens inverse : si un accès natif est retiré, le prochain pull ne remonte plus la donnée → `forget()` dans le brain.
 
 ## 5. Évaluation (Respan) — là où on écrase la concurrence
 

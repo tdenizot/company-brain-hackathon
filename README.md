@@ -19,7 +19,7 @@ cp .env.example .env            # remplir la clé Respan (+ Scalekit pour le pul
 .venv/bin/python -m brain.cli ingest --source sample          # données d'exemple (sans comptes SaaS)
 .venv/bin/python -m brain.cli whoami --as thomas              # jeux de données lisibles
 .venv/bin/python -m brain.cli ask --as thomas "Quel client est impacté par l'alerte sur portail-artisans et quel est son contrat ?"
-.venv/bin/python -m brain.cli grant marc-commercial --to thomas   # Marc accorde l'accès
+.venv/bin/python -m brain.cli grant commercial-maison-duval-renovation --to thomas   # Marc accorde l'accès
 .venv/bin/python -m brain.cli ask --as thomas "…même question…"
 ```
 
