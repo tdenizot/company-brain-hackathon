@@ -34,7 +34,7 @@ npm install
 npm run connect:github              # Marc puis Thomas ; `-- thomas` pour un seul
 ```
 
-Le script affiche d'abord un lien d'autorisation par utilisateur (Marc et Thomas peuvent cliquer en parallèle), attend que chaque compte passe `ACTIVE`, puis lit `GITHUB_OWNER/GITHUB_REPOS` (par défaut `tdenizot/company-brain-hackathon`) au nom de chacun. Les identifiants Scalekit sont les emails de `src/brain/users.py` : `ingest --source scalekit` réutilise ces comptes connectés.
+Le script affiche d'abord un lien d'autorisation par utilisateur (Marc et Thomas peuvent cliquer en parallèle), attend que chaque compte passe `ACTIVE`, puis lit `GITHUB_OWNER/GITHUB_REPOS` (par défaut `tdenizot/company-brain-hackathon`) au nom de chacun. Les identifiants Scalekit sont les emails de `src/brain/users.py`, sauf si `SCALEKIT_ID_MARC` / `SCALEKIT_ID_THOMAS` les remplacent (compte autorisé sous un autre email) : `ingest --source scalekit` réutilise ces comptes connectés.
 
 ## Structure
 

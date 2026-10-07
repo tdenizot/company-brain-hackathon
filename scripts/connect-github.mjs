@@ -13,10 +13,11 @@ import dotenv from 'dotenv'
 
 dotenv.config({ path: new URL('../.env', import.meta.url), quiet: true })
 
-const USERS = {
-  marc: 'marc@company-brain.demo',
-  thomas: 'thomas@company-brain.demo',
-}
+// Same identifiers as src/brain/users.py: the demo email, unless SCALEKIT_ID_<USER> overrides it.
+const USERS = Object.fromEntries(
+  Object.entries({ marc: 'marc@company-brain.demo', thomas: 'thomas@company-brain.demo' })
+    .map(([key, email]) => [key, process.env[`SCALEKIT_ID_${key.toUpperCase()}`] || email]),
+)
 const CONNECTION = process.env.GITHUB_CONNECTION_NAME || 'github'
 const OWNER = process.env.GITHUB_OWNER || 'tdenizot'
 const REPO = (process.env.GITHUB_REPOS || 'company-brain-hackathon').split(',')[0].trim()
