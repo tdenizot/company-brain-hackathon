@@ -5,7 +5,7 @@
   "description": "Scalekit AgentKit scripts for the Company Brain hackathon (Node)",
   "type": "module",
   "scripts": {
-    "connect:github": "node scalekit/connect-github.mjs"
+    "connect:github": "node scripts/connect-github.mjs"
   },
   "dependencies": {
     "@scalekit-sdk/node": "^2.19.0",

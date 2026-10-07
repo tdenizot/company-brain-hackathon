@@ -45,4 +45,4 @@ Le script affiche un lien d'autorisation par utilisateur, attend que le compte p
 | `src/brain/memory.py` | Datasets Cognee par utilisateur, annuaire, grants, mode `naive` pour la baseline d'éval |
 | `src/brain/agent.py` | Copilote d'incident : recall → LLM via Respan → réponse, sources, accès manquants, contradictions |
 | `src/brain/cli.py` | Ligne de commande |
-| `scalekit/connect-github.mjs` | Connexion GitHub par utilisateur via Scalekit AgentKit (SDK Node) |
+| `scripts/connect-github.mjs` | Connexion GitHub par utilisateur via Scalekit AgentKit (SDK Node) |
