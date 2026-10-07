@@ -15,12 +15,12 @@ Plan complet : [`PLAN.md`](./PLAN.md).
 uv venv && uv pip install -e .
 cp .env.example .env            # remplir la clé Respan (+ Scalekit pour le pull live)
 
-PYTHONPATH=src .venv/bin/python -m brain.cli reset
-PYTHONPATH=src .venv/bin/python -m brain.cli ingest --source sample          # données d'exemple (sans comptes SaaS)
-PYTHONPATH=src .venv/bin/python -m brain.cli whoami --as thomas              # jeux de données lisibles
-PYTHONPATH=src .venv/bin/python -m brain.cli ask --as thomas "Quel client est impacté par l'alerte sur portail-artisans et quel est son contrat ?"
-PYTHONPATH=src .venv/bin/python -m brain.cli grant marc-commercial --to thomas   # Marc accorde l'accès
-PYTHONPATH=src .venv/bin/python -m brain.cli ask --as thomas "…même question…"
+.venv/bin/python -m brain.cli reset
+.venv/bin/python -m brain.cli ingest --source sample          # données d'exemple (sans comptes SaaS)
+.venv/bin/python -m brain.cli whoami --as thomas              # jeux de données lisibles
+.venv/bin/python -m brain.cli ask --as thomas "Quel client est impacté par l'alerte sur portail-artisans et quel est son contrat ?"
+.venv/bin/python -m brain.cli grant marc-commercial --to thomas   # Marc accorde l'accès
+.venv/bin/python -m brain.cli ask --as thomas "…même question…"
 ```
 
 ## Structure
