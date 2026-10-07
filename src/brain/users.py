@@ -1,5 +1,7 @@
-"""The two demo users. The Scalekit identifier is the Cognee user's email."""
+"""The two demo users. The Scalekit identifier is the Cognee user's email unless
+SCALEKIT_ID_<USER> overrides it (e.g. when an account was authorized under a real email)."""
 
+import os
 from dataclasses import dataclass
 
 from . import config  # noqa: F401  (env before cognee)
@@ -13,6 +15,10 @@ class DemoUser:
     email: str
     name: str
     sections: frozenset[str]  # Notion sections this user can see natively
+
+    @property
+    def scalekit_id(self) -> str:
+        return os.environ.get(f"SCALEKIT_ID_{self.key.upper()}", self.email)
 
 
 USERS = {
