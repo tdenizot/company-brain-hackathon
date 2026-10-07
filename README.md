@@ -8,3 +8,27 @@ Un copilote d'incident sensible aux droits d'accès, qui relie **Slack** (alerte
 - **Thomas** (invité) : voit la partie projet, pas la partie commerciale.
 
 Plan complet : [`PLAN.md`](./PLAN.md).
+
+## Démarrage rapide
+
+```bash
+uv venv && uv pip install -e .
+cp .env.example .env            # remplir la clé Respan (+ Scalekit pour le pull live)
+
+PYTHONPATH=src .venv/bin/python -m brain.cli reset
+PYTHONPATH=src .venv/bin/python -m brain.cli ingest --source sample          # données d'exemple (sans comptes SaaS)
+PYTHONPATH=src .venv/bin/python -m brain.cli whoami --as thomas              # jeux de données lisibles
+PYTHONPATH=src .venv/bin/python -m brain.cli ask --as thomas "Quel client est impacté par l'alerte sur portail-artisans et quel est son contrat ?"
+PYTHONPATH=src .venv/bin/python -m brain.cli grant marc-commercial --to thomas   # Marc accorde l'accès
+PYTHONPATH=src .venv/bin/python -m brain.cli ask --as thomas "…même question…"
+```
+
+## Structure
+
+| Fichier | Rôle |
+|---|---|
+| `data/sample/` | Pull enregistré : alertes Slack, PRs/issues/workflows GitHub, pages Notion (projet + CRM) |
+| `src/brain/sources/` | `sample.py` (pull enregistré) et `scalekit_pull.py` (pull live, par utilisateur) |
+| `src/brain/memory.py` | Datasets Cognee par utilisateur, annuaire, grants, mode `naive` pour la baseline d'éval |
+| `src/brain/agent.py` | Copilote d'incident : recall → LLM via Respan → réponse, sources, accès manquants, contradictions |
+| `src/brain/cli.py` | Ligne de commande |

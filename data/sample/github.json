@@ -1,0 +1,16 @@
+{
+  "items": [
+    {"repo": "portail-artisans", "kind": "pull_request", "number": 42, "title": "Remplace pdfkit par puppeteer pour la génération des devis", "author": "Julie Martin", "state": "merged", "date": "2026-10-05T21:30:00",
+     "body": "Puppeteer donne un rendu PDF plus fidèle à la maquette. Fichiers modifiés : src/api/devis.ts, package.json. Note : puppeteer embarque Chromium ; non testé en staging faute de temps."},
+    {"repo": "portail-artisans", "kind": "issue", "number": 45, "title": "Erreurs 500 sur POST /api/devis en production", "author": "Julie Martin", "state": "open", "date": "2026-10-06T09:25:00",
+     "body": "Depuis le merge de la PR #42, la génération de devis échoue en production : Chromium ne démarre pas dans l'environnement serverless (mémoire insuffisante). Rollback appliqué le 06/10, mais l'erreur est revenue le 07/10."},
+    {"repo": "portail-artisans", "kind": "file", "path": ".github/workflows/deploy.yml", "author": "Julie Martin", "date": "2026-08-20T10:00:00",
+     "body": "name: deploy\non:\n  push:\n    branches: [main]\njobs:\n  deploy:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/setup-node@v4\n        with:\n          node-version: 18\n      - run: npm ci && npm run build\n      - run: npx vercel deploy --prod   # déploie directement en production à chaque push sur main"},
+    {"repo": "suivi-chantier", "kind": "pull_request", "number": 17, "title": "Ajoute la synchro planning BatiData (cron toutes les 15 min)", "author": "Karim Benali", "state": "merged", "date": "2026-07-08T16:00:00",
+     "body": "Le job sync-planning appelle l'API BatiData avec le token BATIDATA_TOKEN (variable d'environnement). Attention : ce token expire tous les 90 jours."},
+    {"repo": "suivi-chantier", "kind": "file", "path": ".github/workflows/deploy.yml", "author": "Karim Benali", "date": "2026-06-02T09:00:00",
+     "body": "name: deploy\non:\n  push:\n    branches: [main]\njobs:\n  staging:\n    steps:\n      - uses: actions/setup-node@v4\n        with:\n          node-version: 20\n      - run: npm ci && npm run build && npm run deploy:staging\n  production:\n    needs: staging\n    environment: production   # validation manuelle requise\n    steps:\n      - run: npm run deploy:prod"},
+    {"repo": "agent-rh", "kind": "issue", "number": 8, "title": "Ajouter un fallback de modèle en cas d'erreur 429", "author": "Julie Martin", "state": "open", "date": "2026-09-28T15:00:00",
+     "body": "Quand le fournisseur LLM renvoie 429, l'agent RH attend et la latence explose. Proposition : basculer sur un second modèle via le gateway. Non assignée."}
+  ]
+}

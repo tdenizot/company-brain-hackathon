@@ -1,0 +1,28 @@
+{
+  "pages": [
+    {"section": "projet", "type": "projet", "title": "Projet — Portail Artisans", "app": "portail-artisans", "owner": "Julie Martin",
+     "body": "Client : Maison Duval Rénovation. Chef de projet : Julie Martin. Statut : en production depuis le 15/09/2026. Repo GitHub : portail-artisans. Fonctionnalités : création de devis en ligne, génération PDF des devis, suivi des demandes. Prochain jalon : module de signature électronique le 03/11/2026."},
+    {"section": "projet", "type": "projet", "title": "Projet — Suivi Chantier", "app": "suivi-chantier", "owner": "Karim Benali",
+     "body": "Client : BatiNord. Chef de projet : Karim Benali. Statut : maintenance. Repo GitHub : suivi-chantier. Synchronise le planning des chantiers avec l'outil BatiData toutes les 15 minutes. Prochain jalon : v2 (tableau de bord mobile) mi-novembre 2026."},
+    {"section": "projet", "type": "projet", "title": "Projet — Agent RH", "app": "agent-rh", "owner": "Julie Martin",
+     "body": "Client : Groupe Lumen. Chef de projet : Julie Martin. Statut : pilote. Repo GitHub : agent-rh. Assistant conversationnel qui répond aux questions RH des collaborateurs. Fin du pilote le 31/10/2026."},
+    {"section": "projet", "type": "sop", "title": "SOP-01 — Réagir à une alerte maintenance", "app": "toutes", "owner": "Marc",
+     "body": "1. Qualifier l'alerte (gravité 🔴 bloquant / 🟠 dégradé). 2. Répondre dans le thread Slack de l'alerte pour signaler la prise en charge. 3. Prévenir le chef de projet de l'application. 4. Ouvrir une issue GitHub sur le repo concerné. 5. Pour un 🔴 : objectif de rétablissement en moins de 4 h ouvrées."},
+    {"section": "projet", "type": "sop", "title": "SOP-03 — Rollback d'un déploiement", "app": "toutes", "owner": "Marc",
+     "body": "1. Identifier la PR fautive. 2. Créer une PR de revert (jamais de modification directe sur main). 3. Déployer en staging et valider. 4. Déployer en production. 5. Vérifier que le workflow de déploiement ne redéploie pas l'ancienne version."},
+    {"section": "projet", "type": "sop", "title": "SOP-05 — Renouvellement des tokens API tiers", "app": "toutes", "owner": "Karim Benali",
+     "body": "Les tokens API tiers sont listés avec leur date d'expiration. Token BatiData (suivi-chantier) : expire tous les 90 jours, responsable Karim Benali, rappel à J-7. Après renouvellement : relancer les jobs en échec et vérifier le statut au vert."},
+    {"section": "projet", "type": "cahier_des_charges", "title": "Cahier des charges — Portail Artisans", "app": "portail-artisans", "owner": "Julie Martin",
+     "body": "Génération des devis PDF en moins de 3 secondes. Contrainte d'hébergement : serverless, donc génération PDF côté serveur sans dépendance à un navigateur (pas de Chromium). Disponibilité visée : 99,5 %. Temps de rétablissement maximal : 4 h ouvrées pour un incident bloquant."},
+    {"section": "projet", "type": "consignes_build", "title": "Consignes Build", "app": "toutes", "owner": "Marc",
+     "body": "Node.js 20 LTS obligatoire sur tous les projets. Tout déploiement passe par staging avec validation avant la production. Jamais de déploiement direct en production depuis un push sur main. Les secrets sont stockés dans le coffre-fort, jamais dans le code."},
+    {"section": "projet", "type": "planning", "title": "Planning projets — Q4 2026", "app": "toutes", "owner": "Marc",
+     "body": "Portail Artisans : module signature électronique le 03/11/2026 (Julie Martin). Agent RH : fin du pilote le 31/10/2026 (Julie Martin). Suivi Chantier : v2 mi-novembre 2026 (Karim Benali). Julie Martin est sur deux projets en parallèle en octobre."},
+    {"section": "commercial", "type": "crm", "title": "CRM — Maison Duval Rénovation", "app": "portail-artisans", "owner": "Marc",
+     "body": "Contact principal : Sophie Duval (gérante). Contrat de maintenance : 48 000 € par an, renouvellement le 01/12/2026. Clause de pénalité : 500 € par incident bloquant non résolu en 4 h ouvrées. Santé du compte : à risque (deux incidents en septembre, la cliente a exprimé son mécontentement). Opportunité : module signature électronique, 18 000 €."},
+    {"section": "commercial", "type": "crm", "title": "CRM — BatiNord", "app": "suivi-chantier", "owner": "Marc",
+     "body": "Contact principal : Pierre Lemaire (DSI). Contrat de maintenance : 30 000 € par an, renouvellement en mars 2027. Santé du compte : bonne. Opportunité : v2 mobile, 22 000 €, devis envoyé le 20/09/2026."},
+    {"section": "commercial", "type": "crm", "title": "CRM — Groupe Lumen", "app": "agent-rh", "owner": "Marc",
+     "body": "Contact principal : Nadia Ferreira (DRH). Pilote facturé 12 000 €. Décision de passage en production le 15/11/2026, enjeu : 60 000 € par an. Santé du compte : neutre ; point d'attention exprimé par la cliente : la latence de l'agent."}
+  ]
+}

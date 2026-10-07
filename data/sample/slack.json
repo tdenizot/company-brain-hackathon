@@ -1,0 +1,15 @@
+{
+  "channel": "#alertes-maintenance",
+  "messages": [
+    {"ts": "2026-10-06T09:12:00", "user": "UptimeBot", "text": "🔴 portail-artisans — HTTP 500 sur POST /api/devis (taux d'erreur 23 %) depuis 08:55"},
+    {"ts": "2026-10-06T09:20:00", "user": "Julie Martin", "text": "Je regarde. Ça coïncide avec le déploiement d'hier soir (PR #42 sur la génération PDF)."},
+    {"ts": "2026-10-06T09:41:00", "user": "Julie Martin", "text": "Rollback de la génération PDF en cours, je suis la SOP-03."},
+    {"ts": "2026-10-06T11:05:00", "user": "Julie Martin", "text": "Rollback OK, taux d'erreur revenu à 0. Incident clos après 2h10."},
+    {"ts": "2026-10-06T14:03:00", "user": "UptimeBot", "text": "🟠 suivi-chantier — job cron sync-planning en échec (3 fois consécutives) : timeout sur l'API BatiData"},
+    {"ts": "2026-10-06T14:10:00", "user": "Karim Benali", "text": "Le token API BatiData a expiré (cf SOP-05). Je le renouvelle et je relance le job."},
+    {"ts": "2026-10-06T14:32:00", "user": "Karim Benali", "text": "Token renouvelé, sync-planning repasse au vert."},
+    {"ts": "2026-10-07T07:45:00", "user": "UptimeBot", "text": "🟠 agent-rh — latence p95 > 12 s sur /chat, erreurs 429 du fournisseur LLM"},
+    {"ts": "2026-10-07T08:02:00", "user": "UptimeBot", "text": "🔴 portail-artisans — HTTP 500 sur POST /api/devis à nouveau (taux d'erreur 31 %) depuis 07:50"},
+    {"ts": "2026-10-07T08:15:00", "user": "Julie Martin", "text": "Le rollback d'hier n'a pas tenu : le workflow GitHub a redéployé main directement en prod cette nuit, sans passer par staging. Je repasse par staging cette fois."}
+  ]
+}
