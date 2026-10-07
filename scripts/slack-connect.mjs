@@ -45,21 +45,24 @@ if (account?.status !== ConnectorStatus.ACTIVE) {
   }
 }
 
-const { data: auth } = await actions.executeTool({
-  toolName: 'slack_auth_test',
-  toolInput: {},
-  connectedAccountId: account.id,
-});
+// Slack answers 200 with { ok: false, error } on scope or channel errors: surface them.
+async function slack(toolName, toolInput) {
+  const { data } = await actions.executeTool({ toolName, toolInput, connectedAccountId: account.id });
+  if (data?.ok === false) {
+    const scopes = data.needed ? ` (scopes requis : ${data.needed} ; accordés : ${data.provided})` : '';
+    console.error(`${toolName} → ${data.error}${scopes}`);
+    process.exit(1);
+  }
+  return data;
+}
+
+const auth = await slack('slack_auth_test', {});
 console.log(`Connecté à Slack : workspace "${auth.team}" (${auth.team_id}), utilisateur ${auth.user}`);
 if (auth.team?.toLowerCase() !== workspace.toLowerCase()) {
   console.error(`Mauvais workspace : attendu "${workspace}". Déconnecte le compte dans Scalekit et ré-autorise.`);
   process.exit(1);
 }
 
-const { data: history } = await actions.executeTool({
-  toolName: 'slack_fetch_conversation_history',
-  toolInput: { channel, limit: 5 },
-  connectedAccountId: account.id,
-});
-console.log(`${history.messages?.length ?? 0} derniers messages de ${channel} :`);
-for (const m of history.messages ?? []) console.log(`- [${m.user ?? m.bot_id}] ${m.text}`);
+const history = await slack('slack_fetch_conversation_history', { channel, limit: 5 });
+console.log(`${history.messages.length} derniers messages de ${channel} :`);
+for (const m of history.messages) console.log(`- [${m.user ?? m.bot_id}] ${m.text}`);
