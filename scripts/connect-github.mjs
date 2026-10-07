@@ -4,9 +4,9 @@
 //   npm run connect:github              # marc + thomas
 //   npm run connect:github -- thomas    # one user
 //
-// Prerequisite (once, in the dashboard): AgentKit -> Connections -> GitHub, named "github"
-// (Scalekit-managed credentials are enough). Identifiers are the same emails as
-// src/brain/users.py, so the Python pull reuses these connected accounts.
+// Prerequisite (once, in the dashboard): AgentKit -> Connections -> GitHub; its name goes in
+// GITHUB_CONNECTION_NAME (Scalekit-managed credentials are enough). Identifiers are the same
+// emails as src/brain/users.py, so the Python pull reuses these connected accounts.
 
 import { ScalekitClient, ConnectorStatus } from '@scalekit-sdk/node'
 import dotenv from 'dotenv'
@@ -17,10 +17,10 @@ const USERS = {
   marc: 'marc@company-brain.demo',
   thomas: 'thomas@company-brain.demo',
 }
-const CONNECTION = 'github'  // same name as in src/brain/sources/scalekit_pull.py
+const CONNECTION = process.env.GITHUB_CONNECTION_NAME || 'github'
 const OWNER = process.env.GITHUB_OWNER || 'tdenizot'
 const REPO = (process.env.GITHUB_REPOS || 'company-brain-hackathon').split(',')[0].trim()
-const AUTH_TIMEOUT_MS = 5 * 60 * 1000
+const AUTH_TIMEOUT_MS = 10 * 60 * 1000
 
 const missing = ['SCALEKIT_ENVIRONMENT_URL', 'SCALEKIT_CLIENT_ID', 'SCALEKIT_CLIENT_SECRET']
   .filter((name) => !process.env[name])
@@ -45,44 +45,56 @@ const actions = new ScalekitClient(
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-async function status(identifier) {
+async function account(identifier) {
   const { connectedAccount } = await actions.getConnectedAccount({ connectionName: CONNECTION, identifier })
-  return connectedAccount?.status
+  return connectedAccount
 }
 
-async function ensureConnected(key, identifier) {
+// Print every missing authorization link first, so both users can click in parallel.
+async function requestAuthorization(key, identifier) {
   const { connectedAccount } = await actions.getOrCreateConnectedAccount({ connectionName: CONNECTION, identifier })
   if (connectedAccount?.status === ConnectorStatus.ACTIVE) return
-
   const { link } = await actions.getAuthorizationLink({ connectionName: CONNECTION, identifier })
-  console.log(`\n[${key}] Ouvrir ce lien et autoriser GitHub avec le compte de ${key} :\n  ${link}`)
+  console.log(`[${key}] Ouvrir ce lien et autoriser GitHub avec le compte de ${key} :\n  ${link}\n`)
+}
 
+async function waitActive(identifier) {
   const deadline = Date.now() + AUTH_TIMEOUT_MS
   let current
   while (Date.now() < deadline) {
+    current = await account(identifier)
+    if (current?.status === ConnectorStatus.ACTIVE) return current.id
     await sleep(3000)
-    current = await status(identifier)
-    if (current === ConnectorStatus.ACTIVE) return
   }
-  if (current === ConnectorStatus.PENDING_VERIFICATION) {
+  if (current?.status === ConnectorStatus.PENDING_VERIFICATION) {
     throw new Error('compte en PENDING_VERIFICATION : désactiver la vérification utilisateur '
       + 'de l\'environnement Scalekit, ou appeler actions.verifyConnectedAccountUser')
   }
-  throw new Error(`autorisation non terminée après 5 min (statut : ${ConnectorStatus[current] ?? current})`)
+  throw new Error(`autorisation non terminée après ${AUTH_TIMEOUT_MS / 60000} min`
+    + ` (statut : ${ConnectorStatus[current?.status] ?? current?.status})`)
 }
 
-async function github(identifier, toolName, toolInput = {}) {
-  const { data } = await actions.executeTool({ connector: CONNECTION, identifier, toolName, toolInput })
+async function github(connectedAccountId, toolName, toolInput = {}) {
+  const { data } = await actions.executeTool({ connectedAccountId, toolName, toolInput })
   return data
 }
 
 let failed = false
+const pending = []
 for (const key of keys) {
-  const identifier = USERS[key]
   try {
-    await ensureConnected(key, identifier)
-    const me = await github(identifier, 'github_user_get_authenticated')
-    const repo = await github(identifier, 'github_repo_get', { owner: OWNER, repo: REPO })
+    await requestAuthorization(key, USERS[key])
+    pending.push(key)
+  } catch (err) {
+    failed = true
+    console.error(`[${key}] échec : ${err.message}`)
+  }
+}
+for (const key of pending) {
+  try {
+    const accountId = await waitActive(USERS[key])
+    const me = await github(accountId, 'github_user_get_authenticated')
+    const repo = await github(accountId, 'github_repo_get', { owner: OWNER, repo: REPO })
     console.log(`[${key}] GitHub connecté (${me?.login ?? '?'}) -> ${repo?.full_name ?? `${OWNER}/${REPO}`}`
       + ` · ${repo?.private ? 'privé' : 'public'} · branche ${repo?.default_branch ?? '?'}`)
   } catch (err) {

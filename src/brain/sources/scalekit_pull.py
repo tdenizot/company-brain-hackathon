@@ -11,6 +11,8 @@ from ..users import DemoUser
 SLACK_CHANNEL = os.environ.get("SLACK_ALERT_CHANNEL", "#alertes-maintenance")
 GITHUB_OWNER = os.environ.get("GITHUB_OWNER", "")
 GITHUB_REPOS = [r for r in os.environ.get("GITHUB_REPOS", "").split(",") if r]
+# Connection names as created under AgentKit -> Connections (the dashboard may add a suffix).
+CONNECTIONS = {app: os.environ.get(f"{app.upper()}_CONNECTION_NAME", app) for app in ("slack", "github", "notion")}
 
 
 def client():
@@ -29,13 +31,13 @@ def ensure_connected(actions, connection: str, identifier: str) -> None:
         input("Entrée une fois l'autorisation faite… ")
 
 
-def _run(actions, connection: str, identifier: str, tool: str, **tool_input):
-    return actions.execute_tool(tool_name=tool, tool_input=tool_input, connection_name=connection, identifier=identifier).data
+def _run(actions, app: str, identifier: str, tool: str, **tool_input):
+    return actions.execute_tool(tool_name=tool, tool_input=tool_input, connection_name=CONNECTIONS[app], identifier=identifier).data
 
 
 def pull(user: DemoUser) -> list[Doc]:
     actions = client()
-    for conn in ("slack", "github", "notion"):
+    for conn in CONNECTIONS.values():
         ensure_connected(actions, conn, user.email)
 
     docs: list[Doc] = []

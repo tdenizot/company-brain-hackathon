@@ -25,7 +25,7 @@ cp .env.example .env            # remplir la clé Respan (+ Scalekit pour le pul
 
 ## Connecter GitHub via Scalekit (Node)
 
-1. Scalekit Dashboard → **AgentKit → Connections** → GitHub, nommée `github` (identifiants gérés par Scalekit : pas d'OAuth app à créer).
+1. Scalekit Dashboard → **AgentKit → Connections** → GitHub (identifiants gérés par Scalekit : pas d'OAuth app à créer). Reporter son nom exact dans `GITHUB_CONNECTION_NAME` (chez nous `github-connect`).
 2. Renseigner `SCALEKIT_ENVIRONMENT_URL`, `SCALEKIT_CLIENT_ID`, `SCALEKIT_CLIENT_SECRET` dans `.env` (Developers → API Credentials).
 3. Lancer :
 
@@ -34,7 +34,7 @@ npm install
 npm run connect:github              # Marc puis Thomas ; `-- thomas` pour un seul
 ```
 
-Le script affiche un lien d'autorisation par utilisateur, attend que le compte passe `ACTIVE`, puis lit `GITHUB_OWNER/GITHUB_REPOS` (par défaut `tdenizot/company-brain-hackathon`) au nom de chacun. Les identifiants Scalekit sont les emails de `src/brain/users.py` : `ingest --source scalekit` réutilise ces comptes connectés.
+Le script affiche d'abord un lien d'autorisation par utilisateur (Marc et Thomas peuvent cliquer en parallèle), attend que chaque compte passe `ACTIVE`, puis lit `GITHUB_OWNER/GITHUB_REPOS` (par défaut `tdenizot/company-brain-hackathon`) au nom de chacun. Les identifiants Scalekit sont les emails de `src/brain/users.py` : `ingest --source scalekit` réutilise ces comptes connectés.
 
 ## Structure
 
