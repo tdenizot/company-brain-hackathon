@@ -23,6 +23,21 @@ cp .env.example .env            # remplir la clé Respan (+ Scalekit pour le pul
 .venv/bin/python -m brain.cli ask --as thomas "…même question…"
 ```
 
+## Connecter Notion (Scalekit)
+
+Prérequis : connexion `notion` créée dans Scalekit (AgentKit → Connections) et clés `SCALEKIT_*` dans `.env`.
+
+```bash
+npm install
+npm run connect:notion -- --as marc      # puis --as thomas
+npm run connect:notion -- --as marc --reset   # si le mauvais espace a été autorisé
+```
+
+Le script ouvre l'autorisation OAuth si besoin, puis vérifie via `notion_user_get_self` que l'espace autorisé est bien
+« Hackathon Oct. 7th » (`NOTION_EXPECTED_WORKSPACE`) et liste les pages partagées. Sur l'écran Notion, **choisir cet espace
+dans le sélecteur en haut à droite** et cocher les pages à partager. L'identifiant Scalekit est l'email de `src/brain/users.py`,
+donc `ingest --source scalekit` réutilise ce compte connecté.
+
 ## Structure
 
 | Fichier | Rôle |
@@ -32,3 +47,4 @@ cp .env.example .env            # remplir la clé Respan (+ Scalekit pour le pul
 | `src/brain/memory.py` | Datasets Cognee par utilisateur, annuaire, grants, mode `naive` pour la baseline d'éval |
 | `src/brain/agent.py` | Copilote d'incident : recall → LLM via Respan → réponse, sources, accès manquants, contradictions |
 | `src/brain/cli.py` | Ligne de commande |
+| `scripts/connect-notion.mjs` | Connexion Notion par utilisateur via Scalekit (Node) + vérification de l'espace autorisé |
